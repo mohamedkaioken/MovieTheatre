@@ -1,18 +1,38 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-row justify="center">
+    
+    <v-col v-if="Authenticated" cols="5">
+      <div class="home">
+        <h1>Hello</h1>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import ApiService from "../services/api.service";
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  name: "Home",
+
+  mounted() {
+    ApiService.setHeader();
+    this.fetchData();
+    this.interval = setInterval(this.fetchData, 9000)
+  },
+  beforeDestroy(){
+    clearInterval(this.interval)
+  },
+  data: () => ({
+   
+  }),
+  methods: {
+    
+    }
   }
-}
+
 </script>
+<style scoped>
+v-menu__content {
+  overflow-y: hidden;
+}
+</style>

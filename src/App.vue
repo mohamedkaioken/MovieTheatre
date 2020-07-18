@@ -1,32 +1,121 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app id="inspire">
+    <v-navigation-drawer
+    v-if="loggedIn"
+      v-model="drawer"
+      app
+      clipped
+      temporary
+      color="black"
+    >
+      <v-list dense>
+        <template v-for="(item, i) in items">
+          <v-row v-if="item.heading" :key="i" align="center">
+            <v-col cols="6">
+              <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
+            </v-col>
+            <v-col cols="6" class="text-right">
+              <!-- <v-btn small text>edit</v-btn> -->
+            </v-col>
+          </v-row>
+          <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
+          <v-list-item v-else :key="i" link :to="item.route">
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title >{{
+                item.text
+              }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar
+      app
+      v-if="loggedIn"
+      clipped-left
+      color="black"
+    >
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title id="ff">Movie Theater</v-toolbar-title>
+       <v-spacer></v-spacer>
+      <v-btn id="ff" v-if="loggedIn" text @click="TryLogout">
+        Log Out
+      </v-btn>
+    </v-app-bar>
+
+    <v-content id="bg">
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+            <v-fade-transition mode="out-in" hide-on-leave>
+              <router-view >
+            </router-view>
+            </v-fade-transition>
+            
+        </v-row>
+      </v-container>
+    </v-content>
+
+   
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import HelloWorld from './components/HelloWorld';
+import { mapGetters, mapActions } from "vuex";
+import ApiService from './services/api.service';
+export default {
+  name: 'App',
 
-#nav {
-  padding: 30px;
-}
+  components: {
+    HelloWorld,
+  },
+  mounted(){
+  },
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+   data: () => ({
+      drawer: null,
+      user:{},
+      items: [
+      {
+        icon: "mdi-order-bool-descending",
+        text: "Home",
+        route: "/"
+      },
+      
+    ],
+    }),
+    methods:{
+      
+      TryLogout(){
+        this.logout()
+      }
+    },
+    computed:{
+      ...mapActions('auth', ['logout']),
+      ...mapGetters('auth', [
+            'loggedIn'
+        ])
+    },
+    created () {
+      this.$vuetify.theme.dark = true
+    },
+};
+</script>
+<style scoped>
+#bg{
+background-image: url('././assets/BG.png');
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+#ff{
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>
