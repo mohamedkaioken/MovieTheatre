@@ -70,15 +70,10 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 import { mapGetters, mapActions } from "vuex";
-import ApiService from './services/api.service';
 export default {
   name: 'App',
 
-  components: {
-    HelloWorld,
-  },
   mounted(){
   },
 

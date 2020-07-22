@@ -10,17 +10,12 @@
 </template>
 
 <script>
-import ApiService from "../services/api.service";
+//import ApiService from "../services/api.service";
 export default {
   name: "Home",
 
   mounted() {
-    ApiService.setHeader();
-    this.fetchData();
-    this.interval = setInterval(this.fetchData, 9000)
-  },
-  beforeDestroy(){
-    clearInterval(this.interval)
+
   },
   data: () => ({
    
