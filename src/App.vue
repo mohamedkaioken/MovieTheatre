@@ -90,13 +90,12 @@ export default {
     ],
     }),
     methods:{
-      
+      ...mapActions('auth', ['logout']),
       TryLogout(){
         this.logout()
       }
     },
     computed:{
-      ...mapActions('auth', ['logout']),
       ...mapGetters('auth', [
             'loggedIn'
         ])

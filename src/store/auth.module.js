@@ -40,7 +40,6 @@ const actions = {
         try {
             const token = await UserService.login(username, password);
             commit('loginSuccess', token)
-
             // Redirect the user to the page he first tried to visit or to the home view
             router.push(router.history.current.query.redirect || '/');
 
@@ -53,7 +52,25 @@ const actions = {
             return false
         }
     },
+    async register({ commit }, {username, password, firstname, lastname, email, phonenumber}) {
+        commit('registerRequest');
 
+        try {
+            const token = await UserService.register(username, password, firstname, lastname, email, phonenumber);
+            commit('registerSuccess', token)
+
+            // Redirect the user to the page he first tried to visit or to the home view
+            router.push(router.history.current.query.redirect || '/login');
+
+            return true
+        } catch (e) {
+            if (e instanceof AuthenticationError) {
+                commit('registerError', {errorCode: e.errorCode, errorMessage: e.message})
+            }
+
+            return false
+        }
+    },
     logout({ commit }) {
         UserService.logout()
         commit('logoutSuccess')
@@ -75,6 +92,24 @@ const mutations = {
     },
 
     loginError(state, {errorCode, errorMessage}) {
+        state.authenticating = false
+        state.authenticationErrorCode = errorCode
+        state.authenticationError = errorMessage
+    },
+
+    registerRequest(state) {
+        state.authenticating = true;
+        state.authenticationError = ''
+        state.authenticationErrorCode = 0
+    },
+
+    registerSuccess(state, accessToken) {
+        state.accessToken = accessToken
+        state.authenticationSuccess = true;
+        state.authenticating = false;
+    },
+
+    registerError(state, {errorCode, errorMessage}) {
         state.authenticating = false
         state.authenticationErrorCode = errorCode
         state.authenticationError = errorMessage

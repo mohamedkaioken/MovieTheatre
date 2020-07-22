@@ -5,7 +5,7 @@ import { TokenService } from '../services/storage.service'
 
 Vue.use(VueRouter)
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   base: '',
   routes : [
     {

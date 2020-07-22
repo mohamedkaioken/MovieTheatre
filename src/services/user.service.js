@@ -13,13 +13,12 @@ class AuthenticationError extends Error {
 
 const UserService = {
     /**
-     * Login the user and store the access token to TokenService. 
-     * 
+     * Login the user and store the access token to TokenService.
+     *
      * @returns access_token
-     * @throws AuthenticationError 
+     * @throws AuthenticationError
     **/
     login: async function(username, password) {
-        
         const requestData = {
             method: 'post',
             url: "http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/Security/Authenticate",
@@ -31,12 +30,41 @@ const UserService = {
 
         try {
             const response = await ApiService.customRequest(requestData)
-            
-            TokenService.saveToken(response.data.token)
-            ApiService.setHeader()
+            if (response.data.response.token) {
+                TokenService.saveToken(response.data.response.token)
+                ApiService.setHeader()
+            }else{
+                throw new AuthenticationError(response.data.response.status, response.data.response.message)
+            }
+            return response.data.response.token
+        } catch (error) {
+            console.log("Login Fail")
+            throw new AuthenticationError(error.response.status, error.response.data.title)
+        }
+    },
+
+    /**
+     * Register the access token.
+    **/
+    register: async function(username, password, firstname, lastbname, email, phonenumber) {
+        const requestData = {
+            method: 'post',
+            url: "http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/Security/Register",
+            data: {
+                userName: username,
+                password: password,
+                firstName: firstname,
+                lastName: lastbname,
+                email: email,
+                phonenumber: phonenumber
+            }
+        }
+
+        try {
+            const response = await ApiService.customRequest(requestData)
             return response.data
         } catch (error) {
-            console.log("Login Failed")
+            console.log("Register Failed")
             throw new AuthenticationError(error.response.status, error.response.data.title)
         }
     },
