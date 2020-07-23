@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
-    v-if="loggedIn"
+      v-if="loggedIn"
       v-model="drawer"
       app
       clipped
@@ -24,86 +24,71 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title >{{
-                item.text
-              }}</v-list-item-title>
+              <v-list-item-title>{{ item.text }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      v-if="loggedIn"
-      clipped-left
-      color="black"
-    >
+    <v-app-bar app v-if="loggedIn" clipped-left color="black">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title id="ff">Movie Theater</v-toolbar-title>
-       <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
       <v-btn id="ff" v-if="loggedIn" text @click="TryLogout">
         Log Out
       </v-btn>
     </v-app-bar>
 
     <v-content id="bg">
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-fade-transition mode="out-in" hide-on-leave>
-              <router-view >
-            </router-view>
-            </v-fade-transition>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-fade-transition mode="out-in" hide-on-leave>
+            <router-view> </router-view>
+          </v-fade-transition>
+        </v-row>
       </v-container>
     </v-content>
-
-   
   </v-app>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
-  name: 'App',
+  name: "App",
 
-  mounted(){
-  },
+  mounted() {},
 
-   data: () => ({
-      drawer: null,
-      user:{},
-      items: [
+  data: () => ({
+    drawer: null,
+    user: {},
+    items: [
       {
         icon: "mdi-order-bool-descending",
         text: "Home",
-        route: "/"
+        route: "/",
       },
-      
     ],
-    }),
-    methods:{
-      ...mapActions('auth', ['logout']),
-      TryLogout(){
-        this.logout()
-      }
+  }),
+  methods: {
+    ...mapActions("auth", ["logout"]),
+    TryLogout() {
+      this.logout();
     },
-    computed:{
-      ...mapGetters('auth', [
-            'loggedIn'
-        ])
-    },
-    created () {
-      this.$vuetify.theme.dark = true
-    },
+  },
+  computed: {
+    ...mapGetters("auth", ["loggedIn"]),
+  },
+  created() {
+    this.$vuetify.theme.dark = true;
+  },
 };
 </script>
 <style scoped>
-#bg{
-background-image: url('././assets/BG.png');
+#bg {
+  background-image: url("././assets/BG.png");
 }
-#ff{
-  font-family: 'Courier New', Courier, monospace;
+#ff {
+  font-family: "Courier New", Courier, monospace;
 }
 </style>
