@@ -68,6 +68,11 @@ export default {
         text: "Home",
         route: "/",
       },
+      {
+        icon: "mdi-trending-up",
+        text: "Trending",
+        route: "/trending",
+      },
     ],
   }),
   methods: {

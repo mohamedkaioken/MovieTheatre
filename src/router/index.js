@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import Home from '../views/Home.vue'
+import Trending from '../views/Trending.vue'
+
 import { TokenService } from '../services/storage.service'
 
 Vue.use(VueRouter)
@@ -14,11 +17,15 @@ const router = new VueRouter({
       component: Home
     },
     {
+      path: '/trending',
+      name: 'Trending',
+      component: Trending
+    },
+    {
       path:'/login',
       name:'Login',
       component: function() {
         return import('../views/Login.vue')
-  
       },
       meta: {
         public: true,  // Allow access to even if not logged in
