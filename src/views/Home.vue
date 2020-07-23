@@ -11,51 +11,6 @@
           hide-details
           @keyup="GetMovies"
         ></v-text-field>
-        <!-- <v-btn fab dark @click="GetMovies">
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn> -->
-        <!-- <v-carousel>
-          <v-carousel-item
-            v-for="(result, i) in results"
-            :key="i"
-            reverse-transition="fade-transition"
-            transition="fade-transition"
-          >
-          <v-card  class="mx-auto pa-5 transition-swing card" dark>
-            <v-img
-              :src="src+result.poster_path"
-              class="white--text align-end"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              height="200px"
-            >
-              <v-card-title v-text="result.title"></v-card-title>
-            </v-img>
-                    
-                    <v-divider></v-divider>
-                    <v-card-text>
-                      <v-row>
-                        <v-col cols="12">
-                          <v-list class="transparent">
-                            <v-list-item>
-                              <v-list-item-title>Release Date :</v-list-item-title>
-                              <v-list-item-subtitle
-                                class="text-right"
-                              >{{new Date(result.release_date).getFullYear()}}</v-list-item-subtitle>
-                            </v-list-item>
-                            <v-list-item>
-                              <v-list-item-title>Over View:</v-list-item-title>
-                              <v-list-item-subtitle
-                                class="text-right"
-                              >{{result.overview}}</v-list-item-subtitle>
-                            </v-list-item>
-                          </v-list>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-
-          </v-carousel-item>
-        </v-carousel> -->
         <v-col>
           <v-card
             color="purple"
