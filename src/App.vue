@@ -52,16 +52,10 @@
         class="fill-height"
         fluid
       >
-        <v-row
-          align="center"
-          justify="center"
-        >
-            <v-fade-transition mode="out-in" hide-on-leave>
+        <v-fade-transition mode="out-in" hide-on-leave>
               <router-view >
             </router-view>
             </v-fade-transition>
-            
-        </v-row>
       </v-container>
     </v-content>
 
