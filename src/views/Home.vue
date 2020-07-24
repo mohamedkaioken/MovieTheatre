@@ -35,26 +35,15 @@
         min-height="200"
         transition="fade-transition"
       >
-        <v-card class="mx-auto" max-width="344">
+        <v-card class="mx-auto" max-width="344" >
           <v-img :src="src + result.backdrop_path" height="200px"></v-img>
 
           <div class="overline">{{ new Date(result.release_date).getFullYear() }}</div>
-          <v-card-title>>
+          <v-card-title >
             {{ result.title }}
           </v-card-title>
 
-          <v-card-subtitle class="text-left">
-            <v-chip
-              class="ma-1"
-              color="primary"
-              v-for="genreid in result.genre_ids"
-              :key="genreid"
-              small
-            >
-              {{ genres.find(x => x.id === genreid).name }}
-            </v-chip>
-
-          </v-card-subtitle>
+         
 
           <v-card-actions>
             <v-btn small color="yellow darken-2" tile outlined><v-icon left>mdi-star</v-icon>Rate </v-btn>
@@ -65,10 +54,8 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn icon @click="show = !show">
-              <v-icon>{{
-                show ? "mdi-chevron-up" : "mdi-chevron-down"
-              }}</v-icon>
+            <v-btn icon @click.stop="movieDialog = true;refreshMovieDialog(result)">
+              <v-icon>mdi-chevron-up</v-icon>
             </v-btn>
           </v-card-actions>
 
@@ -84,7 +71,43 @@
         </v-card>
       </v-lazy>
       </v-col>
+      <v-dialog
+      v-model="movieDialog"
+      max-width="290"
+      
+    >
+      <v-card color="red darken-1">
+        <v-img :src="movieDialogData.movieImage" width="400px"></v-img>
+        <v-card-title class="headline">{{movieDialogData.movieName}}</v-card-title>
+        <v-spacer></v-spacer>
+        <v-card-subtitle class="text-left">
+          <v-chip
+            class="ma-1"
+            color="primary"
+            v-for="genreid in movieDialogData.movieGenres"
+            :key="genreid"
+            small
+          >
+            {{ genres.find(x => x.id === genreid).name }}
+          </v-chip>
+        </v-card-subtitle>
+        <v-card-text>
+          {{movieDialogData.movieDescription}}
+        </v-card-text>
+          
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            @click="movieDialog = false"
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     </v-row>
+    
     <v-snackbar v-model="snackbar1" timeout = "3000"> Movie Added To Watchlist</v-snackbar>
     <v-snackbar v-model="snackbar2" timeout = "5000"> This Movie Was out of our reach and not added </v-snackbar>
     <v-snackbar v-model="snackbar3" timeout = "1000"> Failure </v-snackbar>
@@ -114,6 +137,15 @@ export default {
     // });
   },
   data: () => ({
+    movieDialog: false,
+    movieDialogData : {
+      movieid: 0,
+      movieName: '',
+      movieRating: 0,
+      movieDescription: 0,
+      movieGenres: [],
+      movieImage: "",
+    },
     show: false,
     movies: [],
     results: [],
@@ -236,6 +268,23 @@ export default {
           }).catch(function (error) {
             console.log(error);
           });
+        } else {
+          this.snackbar2 = true;
+          console.log(r);
+        }
+      });
+    },
+    refreshMovieDialog(result){
+      ApiService.get(
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Movies/SearchMovie/${result.title}`
+      ).then((r) => {
+        if (r.status == 200) {
+            this.movieDialogData.movieid = 0
+            this.movieDialogData.movieName = result.title
+            this.movieDialogData.movieRating = 0
+            this.movieDialogData.movieDescription = result.overview
+            this.movieDialogData.movieGenres = result.genre_ids
+            this.movieDialogData.movieImage = this.src + result.backdrop_path
         } else {
           this.snackbar2 = true;
           console.log(r);
