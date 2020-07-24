@@ -1,7 +1,7 @@
 <template>
-  <v-container>
-    
-  </v-container>
+  <v-main>
+    <div class="overline">Recommended</div>
+  </v-main>
 </template>
 
 <script>

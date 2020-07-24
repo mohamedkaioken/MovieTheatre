@@ -56,7 +56,7 @@ const UserService = {
                 firstName: firstname,
                 lastName: lastbname,
                 email: email,
-                phonenumber: phonenumber
+                phoneNumber: phonenumber
             }
         }
 

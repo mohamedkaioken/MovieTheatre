@@ -6,7 +6,7 @@
       app
       clipped
       temporary
-      color="black"
+      color="red"
     >
       <v-list dense>
         <template v-for="(item, i) in items">
@@ -69,9 +69,14 @@ export default {
         route: "/",
       },
       {
-        icon: "mdi-trending-up",
-        text: "Trending",
-        route: "/trending",
+        icon: "mdi-thumb-up",
+        text: "Recommended",
+        route: "/recommended",
+      },
+      {
+        icon: "mdi-clipboard-list-outline",
+        text: "Watch List",
+        route: "/watchlist",
       },
     ],
   }),

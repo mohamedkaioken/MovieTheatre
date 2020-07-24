@@ -47,11 +47,11 @@
             <v-chip
               class="ma-1"
               color="primary"
-              v-for="genre in result.genre_ids"
-              :key="genre"
+              v-for="genreid in result.genre_ids"
+              :key="genreid"
               small
             >
-              {{ genres.find(x => x.id === genre).name }}
+              {{ genres.find(x => x.id === genreid).name }}
             </v-chip>
 
           </v-card-subtitle>
@@ -59,7 +59,7 @@
           <v-card-actions>
             <v-btn small color="yellow darken-2" tile outlined><v-icon left>mdi-star</v-icon>Rate </v-btn>
 
-            <v-btn small>
+            <v-btn small @click="addToWatchlist(result.title)">
               <v-icon left>mdi-login-variant</v-icon> Watchlist
             </v-btn>
 
@@ -85,6 +85,9 @@
       </v-lazy>
       </v-col>
     </v-row>
+    <v-snackbar v-model="snackbar1" timeout = "3000"> Movie Added To Watchlist</v-snackbar>
+    <v-snackbar v-model="snackbar2" timeout = "5000"> This Movie Was out of our reach and not added </v-snackbar>
+    <v-snackbar v-model="snackbar3" timeout = "1000"> Failure </v-snackbar>
   </v-container>
 </template>
 
@@ -117,6 +120,9 @@ export default {
     descriptions: [],
     movie: "",
     ShowForm: false,
+    snackbar1:false,
+    snackbar2:false,
+    snackbar3:false,
     src: "https://image.tmdb.org/t/p/original",
     rating: 0.0,
     genres: [
@@ -214,9 +220,27 @@ export default {
           } else {
             console.log(r);
           }
-          console.log(this.results);
         });
       }
+    },
+    addToWatchlist(name){
+      ApiService.get(
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Movies/SearchMovie/${name}`
+      ).then((r) => {
+        if (r.status == 200) {
+          console.log(r.data[0].id);
+          ApiService.post(
+            `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/WatchList`
+          ,{movieId: r.data[0].id,userId: 283229}).then(() => {
+              this.snackbar1 = true
+          }).catch(function (error) {
+            console.log(error);
+          });
+        } else {
+          this.snackbar2 = true;
+          console.log(r);
+        }
+      });
     },
   },
 };

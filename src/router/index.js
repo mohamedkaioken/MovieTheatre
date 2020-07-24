@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Home from '../views/Home.vue'
-import Trending from '../views/Trending.vue'
+import Recommended from '../views/Recommended.vue'
+import Watchlist from '../views/Watchlist.vue'
 
 import { TokenService } from '../services/storage.service'
 
@@ -17,9 +18,14 @@ const router = new VueRouter({
       component: Home
     },
     {
-      path: '/trending',
-      name: 'Trending',
-      component: Trending
+      path: '/recommended',
+      name: 'Recommended',
+      component: Recommended
+    },
+    {
+      path: '/watchlist',
+      name: 'Watchlist',
+      component: Watchlist
     },
     {
       path:'/login',
