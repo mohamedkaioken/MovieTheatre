@@ -25,7 +25,7 @@
         md="4"
         lg="3"
         v-for="result in results"
-        :key="result.title"
+        :key="result.id"
       >
       <v-lazy
         v-model="isActive"
@@ -43,7 +43,7 @@
             {{ result.title }}
           </v-card-title>
           <v-card-actions>
-            <v-btn small @click="addToWatchlist(result.title)" color="red darken-1">
+            <v-btn small @click="addToWatchlist(result.title)" color="orange darken-3">
               <v-icon left>mdi-login-variant</v-icon> Watchlist
             </v-btn>
             <v-spacer></v-spacer>
@@ -69,7 +69,7 @@
       max-width="290"
       
     >
-      <v-card color="red darken-1" :loading="movieDialogData.movieid==-1">
+      <v-card color="orange darken-3" :loading="movieDialogData.movieid==-1">
         <v-img :src="movieDialogData.movieImage" width="400px"></v-img>
         <v-card-title class="headline">{{movieDialogData.movieName}}</v-card-title>
         <v-spacer></v-spacer>

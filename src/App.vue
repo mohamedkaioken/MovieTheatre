@@ -1,12 +1,12 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-if="loggedIn"
       v-model="drawer"
       app
       clipped
       temporary
-      color="red"
+      color="orange darken-3"
     >
       <v-list dense>
         <template v-for="(item, i) in items">
@@ -14,9 +14,9 @@
             <v-col cols="6">
               <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
             </v-col>
-            <v-col cols="6" class="text-right">
+            <v-col cols="6" class="text-right"> -->
               <!-- <v-btn small text>edit</v-btn> -->
-            </v-col>
+            <!-- </v-col>
           </v-row>
           <v-divider v-else-if="item.divider" :key="i" dark class="my-4" />
           <v-list-item v-else :key="i" link :to="item.route">
@@ -29,14 +29,21 @@
           </v-list-item>
         </template>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
 
     <v-app-bar app v-if="loggedIn" clipped-left color="black">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title id="ff">Movie Theater</v-toolbar-title>
+      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" color="orange darken-3"/> -->
+      <v-toolbar-title id="ff"><v-img link to="/recommended" src="@/assets/Krisp.png"></v-img>
+      </v-toolbar-title>
+       <v-btn id="ff" v-if="loggedIn" text to="/recommended">
+        Home
+      </v-btn>
+      <v-btn id="ff" v-if="loggedIn" text to="/watchlist">
+        Watch List
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn id="ff" v-if="loggedIn" text @click="TryLogout">
-        Log Out
+        LogOut
       </v-btn>
     </v-app-bar>
 
