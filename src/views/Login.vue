@@ -3,7 +3,7 @@
     <vue-headful title="Movie Theatre | Login" description="Login To Movie Theatre"/>
     <v-slide-y-transition>
       <v-card dark class="mx-auto card elevation-12" min-width="600px" >
-        <v-toolbar color="red darken-3" dark flat>
+        <v-toolbar color="orange darken-3" dark flat>
           <v-toolbar-title>Login To Movie Theatre</v-toolbar-title>
           <v-spacer />
           <v-icon>mdi-movie-filter</v-icon>
@@ -17,7 +17,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn text color="grey lighten-4" to="register">Register</v-btn>
-          <v-btn color="red darken-3" @click="tryLogin" :loading="loading">Login  <v-icon right>mdi-login-variant</v-icon></v-btn>
+          <v-btn color="orange darken-3" @click="tryLogin" :loading="loading">Login  <v-icon right>mdi-login-variant</v-icon></v-btn>
         </v-card-actions>
       </v-card>
     </v-slide-y-transition>

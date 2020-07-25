@@ -2,7 +2,7 @@
     <div>
         <vue-headful title="Movie Theatre | Register" description="Register To Movie Theatre"/>
         <v-card dark class="mx-auto card elevation-12" min-width="600px" >
-            <v-toolbar color="red darken-3" dark flat>
+            <v-toolbar color="orange darken-3" dark flat>
                 <v-toolbar-title>Register To Movie Theatre</v-toolbar-title>
                 <v-spacer />
                 <v-icon>mdi-movie-filter</v-icon>
@@ -39,7 +39,7 @@
             <v-card-actions>
                 <v-spacer />
                     <v-btn text color="grey lighten-4" to="login">Login </v-btn>
-                <v-btn color="red darken-3" @click="tryRegister">Register NOW <v-icon right>mdi-account-plus</v-icon></v-btn>
+                <v-btn color="orange darken-3" @click="tryRegister">Register NOW <v-icon right>mdi-account-plus</v-icon></v-btn>
             </v-card-actions>
 
         </v-card>
