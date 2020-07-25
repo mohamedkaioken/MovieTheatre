@@ -42,20 +42,13 @@
           <v-card-title >
             {{ result.title }}
           </v-card-title>
-
-         
-
           <v-card-actions>
-            <v-btn small color="yellow darken-2" tile outlined><v-icon left>mdi-star</v-icon>Rate </v-btn>
-
-            <v-btn small @click="addToWatchlist(result.title)">
+            <v-btn small @click="addToWatchlist(result.title)" color="red darken-1">
               <v-icon left>mdi-login-variant</v-icon> Watchlist
             </v-btn>
-
             <v-spacer></v-spacer>
-
-            <v-btn icon @click.stop="movieDialog = true;refreshMovieDialog(result)">
-              <v-icon>mdi-chevron-up</v-icon>
+            <v-btn small rounded @click.stop="movieDialog = true;refreshMovieDialog(result)">
+             Show More <v-icon>mdi-chevron-up</v-icon>
             </v-btn>
           </v-card-actions>
 
@@ -76,7 +69,7 @@
       max-width="290"
       
     >
-      <v-card color="red darken-1">
+      <v-card color="red darken-1" :loading="movieDialogData.movieid==-1">
         <v-img :src="movieDialogData.movieImage" width="400px"></v-img>
         <v-card-title class="headline">{{movieDialogData.movieName}}</v-card-title>
         <v-spacer></v-spacer>
@@ -96,6 +89,16 @@
         </v-card-text>
           
         <v-card-actions>
+          <v-rating
+            v-model="rating"
+            background-color="white"
+            color="yellow accent-4"
+            dense
+            half-increments
+            hover
+            size="18"
+            @input="addRating($event, movieDialogData.movieid)"
+          ></v-rating>
           <v-spacer></v-spacer>
           <v-btn
             text
@@ -111,6 +114,7 @@
     <v-snackbar v-model="snackbar1" timeout = "3000"> Movie Added To Watchlist</v-snackbar>
     <v-snackbar v-model="snackbar2" timeout = "5000"> This Movie Was out of our reach and not added </v-snackbar>
     <v-snackbar v-model="snackbar3" timeout = "1000"> Failure </v-snackbar>
+    <v-snackbar v-model="snackbar4" timeout = "3000"> Thanks For Your Rating</v-snackbar>
   </v-container>
 </template>
 
@@ -137,12 +141,13 @@ export default {
     // });
   },
   data: () => ({
+    rating: 4.3,
     movieDialog: false,
     movieDialogData : {
-      movieid: 0,
+      movieid: -1,
       movieName: '',
       movieRating: 0,
-      movieDescription: 0,
+      movieDescription: "",
       movieGenres: [],
       movieImage: "",
     },
@@ -155,8 +160,8 @@ export default {
     snackbar1:false,
     snackbar2:false,
     snackbar3:false,
+    snackbar4:false,
     src: "https://image.tmdb.org/t/p/original",
-    rating: 0.0,
     genres: [
       {
         id: 28,
@@ -275,22 +280,33 @@ export default {
       });
     },
     refreshMovieDialog(result){
+      this.movieDialogData.movieid = -1
       ApiService.get(
         `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Movies/SearchMovie/${result.title}`
       ).then((r) => {
         if (r.status == 200) {
-            this.movieDialogData.movieid = 0
-            this.movieDialogData.movieName = result.title
-            this.movieDialogData.movieRating = 0
-            this.movieDialogData.movieDescription = result.overview
-            this.movieDialogData.movieGenres = result.genre_ids
-            this.movieDialogData.movieImage = this.src + result.backdrop_path
+          this.movieDialogData.movieid = r.data[0].id
+          this.movieDialogData.movieName = result.title
+          this.movieDialogData.movieRating = 0
+          this.movieDialogData.movieDescription = result.overview
+          this.movieDialogData.movieGenres = result.genre_ids
+          this.movieDialogData.movieImage = this.src + result.backdrop_path
         } else {
-          this.snackbar2 = true;
+          this.snackbar3 = true;
           console.log(r);
         }
       });
     },
+    addRating(value, id) {
+      ApiService.post(
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Ratings/RateMovie/${id}`
+      ,{movieId: id,userId: value}).then(() => {
+          this.snackbar4 = true
+      }).catch(function (error) {
+          this.snackbar2 = true;
+        console.log(error);
+      });
+    }
   },
 };
 </script>
