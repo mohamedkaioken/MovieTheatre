@@ -32,6 +32,7 @@ const UserService = {
             const response = await ApiService.customRequest(requestData)
             if (response.data.response.token) {
                 TokenService.saveToken(response.data.response.token)
+                TokenService.saveUserId(response.data.response.user.id)
                 ApiService.setHeader()
             }else{
                 throw new AuthenticationError(response.data.response.status, response.data.response.message)

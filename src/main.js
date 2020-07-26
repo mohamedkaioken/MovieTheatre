@@ -8,7 +8,7 @@ import {TokenService} from './services/storage.service'
 import JsonExcel from 'vue-json-excel'
 import VueGoogleCharts from 'vue-google-charts'
 import vueHeadful from 'vue-headful'
-
+import Carousel3d from 'vue-carousel-3d'
 
 Vue.config.productionTip = false
 Vue.config.silent = true
@@ -26,6 +26,7 @@ if (TokenService.getToken()) {
 Vue.component('downloadExcel', JsonExcel)
 Vue.component('vue-headful', vueHeadful)
 
+Vue.use(Carousel3d);
 Vue.use(require('vue-moment'))
 new Vue({
   router,

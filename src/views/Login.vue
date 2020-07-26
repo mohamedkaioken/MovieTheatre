@@ -45,7 +45,7 @@ import { mapGetters, mapActions } from "vuex";
       ],
     }),
     mounted(){
-      console.log(this)
+      
     },
     methods:{
       ...mapActions('auth', ['login']),
