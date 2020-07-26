@@ -21,7 +21,7 @@
                 color="transparent"
                 width="200"
                 link
-                :to="movieDetails + result.id"
+                :to="movieDetails + result.title + '/' + result.year"
               >
                 <v-img
                   :src="result.image"
@@ -111,30 +111,17 @@ import ApiService from "../services/api.service";
 
 export default {
   mounted() {
-    ApiService.get(
-      `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Recommendations/UserRecommendation`
-    ).then((data) => {
-      if (data.status == 200) {
-        this.recommended = data.data.recommendations;
-        
-        this.ShowTime = false;
-        
-      } else {
-        console.log(data);
-      }
-      
-      
-    });
+    this.GetMovie();
+    
     
     
   },
   data: () => ({
     searchQuery: [],
-    recommended: [],
+    recommended: null,
     movieTitles: [],
     show: false,
     movieDetails: "/movie_details/",
-    movies: [],
     results: [],
     descriptions: [],
     movie: "",
@@ -242,19 +229,34 @@ export default {
       }
     },
     GetMovie() {
-      for (let i = 0; i < this.recommended.length; i++) {
+      let movies = [];
+      ApiService.get(
+      `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Recommendations/UserRecommendation`
+    ).then((data) => {
+      if (data.status == 200) {
+        movies = data.data.recommendations;
+         for (let i = 0; i < movies.length; i++) {
         ApiService.get(
-          `https://api.themoviedb.org/3/search/multi?api_key=18ba471261d253fb5c574c6f1de06e76&query=${this.recommended[i].title}`
+          `https://api.themoviedb.org/3/search/multi?api_key=18ba471261d253fb5c574c6f1de06e76&query=${movies[i].title}`
         ).then((r) => {
           if (r.status == 200) {
-            this.recommended[i].image = "https://image.tmdb.org/t/p/original"+r.data.results[0].poster_path;
+            movies[i].image = "https://image.tmdb.org/t/p/original"+r.data.results[0].poster_path;
+            movies[i].id++;
           } else {
             console.log(r);
           }
-          console.log(this.recommended[i].image); 
+          console.log(movies[i].image); 
         });
           
       }
+        this.recommended = movies;
+        console.log(this.recommended);
+        
+      } else {
+        console.log(data);
+      }    
+    });
+     
     },
   },
 };

@@ -26,9 +26,9 @@
                 <v-col cols="8"> {{ results.title }}</v-col>
                 <v-col cols="4">
                   <v-row>
-                    <div class="">{{ 4.5 }}</div>
+                    <div class="">{{ results.vote_average/2 }}</div>
                     <v-rating
-                      :value="4.5"
+                      :value="results.vote_average/2"
                       color="amber"
                       dense
                       half-increments
@@ -153,18 +153,20 @@ import ApiService from "../services/api.service";
 
 export default {
   mounted() {
-    this.movieId = this.$route.params.movieId;
+    this.movietitle = this.$route.params.movietitle;
+    this.release_date = this.$route.params.release_date;
     ApiService.get(
-      `https://api.themoviedb.org/3/movie/${this.movieId}?api_key=18ba471261d253fb5c574c6f1de06e76`
+      `
+https://api.themoviedb.org/3/search/movie?api_key=18ba471261d253fb5c574c6f1de06e76&query=${this.movietitle}&year=${this.release_date}`
     ).then((r) => {
       if (r.status == 200) {
         this.movies = r.data;
-        this.results = this.movies;
+        this.results = this.movies.results[0];
         this.ShowTime = false;
       } else {
         console.log(r);
       }
-      console.log(this.results);
+      console.log(this.movies);
     });
   },
   data: () => ({

@@ -24,7 +24,7 @@ const router = new VueRouter({
       component: Recommended
     },
     {
-      path: '/movie_details/:movieId',
+      path: '/movie_details/:movietitle/:release_date',
       name: 'MovieDetails',
       component: MovieD
     },
