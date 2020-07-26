@@ -66,11 +66,11 @@
       </v-col>
       <v-dialog
       v-model="movieDialog"
-      max-width="290"
+      max-width="450"
       
     >
-      <v-card color="orange darken-3" :loading="movieDialogData.movieid==-1">
-        <v-img :src="movieDialogData.movieImage" width="400px"></v-img>
+      <v-card color="grey darken-3" :loading="movieDialogData.movieid==-1">
+        <v-img :src="movieDialogData.movieImage" width="450px"></v-img>
         <v-card-title class="headline">{{movieDialogData.movieName}}</v-card-title>
         <v-spacer></v-spacer>
         <v-card-subtitle class="text-left">

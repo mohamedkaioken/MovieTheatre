@@ -47,7 +47,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-content id="bg">
+    <v-main id="bg">
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
           <v-fade-transition mode="out-in" hide-on-leave>
@@ -55,7 +55,7 @@
           </v-fade-transition>
         </v-row>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

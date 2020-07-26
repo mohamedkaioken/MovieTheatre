@@ -8,17 +8,14 @@
           elevation="8"
           max-width="1300"
           color="transparent"
-          
         >
           <v-slide-group
             v-model="model"
             class="pa-4"
             active-class="transparent"
             show-arrows
-            
-            
           >
-            <v-slide-item v-for="result in results" :key="result">
+            <v-slide-item v-for="result in recommended" :key="result.id">
               <v-card
                 class="mx-auto pa-5 transition-swing card"
                 color="transparent"
@@ -27,15 +24,15 @@
                 :to="movieDetails + result.id"
               >
                 <v-img
-                  :src="src + result.poster_path"
+                  :src="result.image"
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   height="200px"
                 >
-                  <v-card-title
-                    class="subtitle-1"
-                    v-text="result.title"
-                  ></v-card-title>
+                <v-card-title
+                  class="subtitle-1"
+                  v-text="result.title"
+                ></v-card-title>
                 </v-img>
 
                 <v-divider></v-divider>
@@ -43,15 +40,15 @@
                   <v-row>
                     <v-col cols="12">
                       <v-list class="transparent">
-                        <v-list-item>
+                        <!-- <v-list-item>
                           <v-list-item-title class="text-center">{{
                             genres.find((x) => x.id === result.genre_ids[0])
                               .name
                           }}</v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
                         <v-list-item>
                           <v-list-item-title class="text-center">{{
-                            new Date(result.release_date).getFullYear()
+                            result.year
                           }}</v-list-item-title>
                         </v-list-item>
                       </v-list>
@@ -115,23 +112,26 @@ import ApiService from "../services/api.service";
 export default {
   mounted() {
     ApiService.get(
-      `https://api.themoviedb.org/3/discover/movie?api_key=18ba471261d253fb5c574c6f1de06e76`
-    ).then((r) => {
-      if (r.status == 200) {
-        this.movies = r.data;
-        this.results = this.movies.results;
-        this.descriptions = this.results.map((s) => ({
-          description: s.overview,
-        }));
+      `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Recommendations/UserRecommendation`
+    ).then((data) => {
+      if (data.status == 200) {
+        this.recommended = data.data.recommendations;
+        
         this.ShowTime = false;
+        
       } else {
-        console.log(r);
+        console.log(data);
       }
-      console.log(this.results);
+      
+      
     });
+    
+    
   },
   data: () => ({
-    
+    searchQuery: [],
+    recommended: [],
+    movieTitles: [],
     show: false,
     movieDetails: "/movie_details/",
     movies: [],
@@ -142,7 +142,6 @@ export default {
     snackbar1: false,
     snackbar2: false,
     snackbar3: false,
-    src: "https://image.tmdb.org/t/p/original",
     rating: 0.0,
     genres: [
       {
@@ -242,10 +241,23 @@ export default {
         });
       }
     },
-    GoToDetails() {},
+    GetMovie() {
+      for (let i = 0; i < this.recommended.length; i++) {
+        ApiService.get(
+          `https://api.themoviedb.org/3/search/multi?api_key=18ba471261d253fb5c574c6f1de06e76&query=${this.recommended[i].title}`
+        ).then((r) => {
+          if (r.status == 200) {
+            this.recommended[i].image = "https://image.tmdb.org/t/p/original"+r.data.results[0].poster_path;
+          } else {
+            console.log(r);
+          }
+          console.log(this.recommended[i].image); 
+        });
+          
+      }
+    },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
