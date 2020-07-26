@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import Recommended from '../views/Recommendation.vue'
 import Watchlist from '../views/Watchlist.vue'
 import MovieD from '../views/Movie_Details.vue'
+import Search from '../views/Search.vue'
 
 import { TokenService } from '../services/storage.service'
 
@@ -22,6 +23,11 @@ const router = new VueRouter({
       path: '/recommended',
       name: 'Recommended',
       component: Recommended
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     },
     {
       path: '/movie_details/:movietitle/:release_date',

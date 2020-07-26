@@ -41,6 +41,9 @@
       <v-btn id="ff" v-if="loggedIn" text to="/watchlist">
         Watch List
       </v-btn>
+      <v-btn id="ff" v-if="loggedIn" text to="/search">
+        Search
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn id="ff" v-if="loggedIn" text @click="TryLogout">
         LogOut
@@ -84,6 +87,11 @@ export default {
         icon: "mdi-clipboard-list-outline",
         text: "Watch List",
         route: "/watchlist",
+      },
+      {
+        icon: "mdi-clipboard-list-outline",
+        text: "Search",
+        route: "/search",
       },
     ],
   }),
