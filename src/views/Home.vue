@@ -299,7 +299,7 @@ export default {
     },
     addRating(value, id) {
       ApiService.post(
-        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Ratings/RateMovie/${id}`
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Ratings/RateMovie/`
       ,{movieId: id,userId: value}).then(() => {
           this.snackbar4 = true
       }).catch(function (error) {

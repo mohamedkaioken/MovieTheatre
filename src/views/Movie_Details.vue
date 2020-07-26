@@ -56,13 +56,9 @@
                   {{ results.overview }} 
               </v-card-text>
               <v-card-actions class="pa-4">
-                <v-btn>
-                  <v-icon left>mdi-login-variant</v-icon>
+                <v-btn @click="addToWatchlist(results.title)">
+                  <v-icon color="yellow" left>mdi-login-variant</v-icon>
                   Add to WatchList
-                </v-btn>
-                <v-btn>
-                  <v-icon color="yellow" left>mdi-star</v-icon>
-                  Rate this Movie
                 </v-btn>
                 <v-spacer></v-spacer>
                 <span class="grey--text text--lighten-2 caption mr-2">
@@ -77,6 +73,7 @@
                   hover
                   size="23"
                   class="mr-10"
+                   @input="addRating($event, results.movieId)"
                 ></v-rating>
               </v-card-actions>
               <v-row>
@@ -145,6 +142,10 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-snackbar v-model="snackbar1" timeout = "3000"> Movie Added To Watchlist</v-snackbar>
+    <v-snackbar v-model="snackbar2" timeout = "5000"> This Movie Was out of our reach and not added </v-snackbar>
+    <v-snackbar v-model="snackbar3" timeout = "1000"> Failure </v-snackbar>
+    <v-snackbar v-model="snackbar4" timeout = "3000"> Thanks For Your Rating</v-snackbar>
   </v-container>
 </template>
 
@@ -156,12 +157,20 @@ export default {
     this.movietitle = this.$route.params.movietitle;
     this.release_date = this.$route.params.release_date;
     ApiService.get(
-      `
-https://api.themoviedb.org/3/search/movie?api_key=18ba471261d253fb5c574c6f1de06e76&query=${this.movietitle}&year=${this.release_date}`
+      `https://api.themoviedb.org/3/search/movie?api_key=18ba471261d253fb5c574c6f1de06e76&query=${this.movietitle}&year=${this.release_date}`
     ).then((r) => {
       if (r.status == 200) {
         this.movies = r.data;
         this.results = this.movies.results[0];
+        ApiService.get(
+          `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Movies/SearchMovie/${this.results.title}`
+        ).then((r) => {
+          if (r.status == 200) {
+            this.results.movieId = r.data[0].id
+          } else {
+            console.log(r);
+          }
+        });
         this.ShowTime = false;
       } else {
         console.log(r);
@@ -280,6 +289,35 @@ https://api.themoviedb.org/3/search/movie?api_key=18ba471261d253fb5c574c6f1de06e
         });
       }
     },
+    addToWatchlist(name){
+      ApiService.get(
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Movies/SearchMovie/${name}`
+      ).then((r) => {
+        if (r.status == 200) {
+          console.log(r.data[0].id);
+          ApiService.post(
+            `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/WatchList`
+          ,{movieId: r.data[0].id,userId: 283229}).then(() => {
+              this.snackbar1 = true
+          }).catch(function (error) {
+            console.log(error);
+          });
+        } else {
+          this.snackbar2 = true;
+          console.log(r);
+        }
+      });
+    },
+    addRating(value, id) {
+      ApiService.post(
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Ratings/RateMovie/`
+      ,{movieId: id,userId: value}).then((r) => {
+          console.log(r);
+      }).catch(function (error) {
+          this.snackbar2 = true
+          console.log(error);
+      });
+    }
   },
 };
 </script>
