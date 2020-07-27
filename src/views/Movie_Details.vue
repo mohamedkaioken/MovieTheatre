@@ -151,9 +151,11 @@
 
 <script>
 import ApiService from "../services/api.service";
+import {TokenService} from "../services/storage.service";
 
 export default {
   mounted() {
+    console.log(TokenService.getRole());
     this.movietitle = this.$route.params.movietitle;
     this.release_date = this.$route.params.release_date;
     ApiService.get(
@@ -297,7 +299,7 @@ export default {
           console.log(r.data[0].id);
           ApiService.post(
             `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/WatchList`
-          ,{movieId: r.data[0].id,userId: 283229}).then(() => {
+          ,{movieId: r.data[0].id,userId: TokenService.getUserId()}).then(() => {
               this.snackbar1 = true
           }).catch(function (error) {
             console.log(error);

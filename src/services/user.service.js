@@ -1,5 +1,6 @@
 import ApiService from './api.service'
 import { TokenService } from './storage.service'
+import router from '../router'
 
 
 class AuthenticationError extends Error {
@@ -34,6 +35,13 @@ const UserService = {
                 TokenService.saveToken(response.data.response.token)
                 TokenService.saveUserId(response.data.response.user.id)
                 ApiService.setHeader()
+                if(response.data.response.rated == true)
+                {
+                    router.push(router.history.current.query.redirect || '/recommended');
+                }
+                else{
+                    router.push(router.history.current.query.redirect || '/');
+                }
             }else{
                 throw new AuthenticationError(response.data.response.status, response.data.response.message)
             }
