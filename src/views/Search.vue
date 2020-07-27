@@ -44,7 +44,7 @@
             {{ result.title }}
           </v-card-title>
           <v-card-actions>
-            <v-btn small @click="addToWatchlist(result.title)" color="orange darken-3">
+            <v-btn v-if="loggedIn" small @click="addToWatchlist(result.title)" color="orange darken-3">
               <v-icon left>mdi-login-variant</v-icon> Watchlist
             </v-btn>
             <v-spacer></v-spacer>
@@ -91,6 +91,7 @@
           
         <v-card-actions>
           <v-rating
+          v-if="loggedIn"
             v-model="rating"
             background-color="white"
             color="yellow accent-4"
@@ -120,6 +121,7 @@
 </template>
 
 <script>
+import { mapGetters} from "vuex";
 import ApiService from "../services/api.service";
 export default {
   name: "Home",
@@ -308,6 +310,9 @@ export default {
         console.log(error);
       });
     }
+  },
+  computed: {
+    ...mapGetters("auth", ["loggedIn"]),
   },
 };
 </script>

@@ -56,7 +56,7 @@
        <v-btn id="ff" v-if="loggedIn" text to="/recommended">
         Home
       </v-btn>
-      <v-btn id="ff" v-if="!loggedIn" text to="/">
+      <v-btn id="ff" v-if="!loggedIn" text to="/search">
         Home
       </v-btn>
       <v-btn id="ff" v-if="loggedIn" text to="/watchlist">

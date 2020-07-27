@@ -18,11 +18,6 @@ const router = new VueRouter({
       path: '/',
       name: 'Home',
       component: Home,
-      meta: {
-        public: true,  // Allow access to even if not logged in
-        onlyWhenLoggedOut: true
-      }
-      
     },
     {
       path: '/recommended',
@@ -32,7 +27,11 @@ const router = new VueRouter({
     {
       path: '/search',
       name: 'Search',
-      component: Search
+      component: Search,
+      meta: {
+        public: true,  // Allow access to even if not logged in
+        onlyWhenLoggedOut: true
+      }
     },
     {
       path: '/movie_details/:movietitle/:release_date',

@@ -39,7 +39,7 @@ const UserService = {
                 {
                     router.push(router.history.current.query.redirect || '/recommended');
                 }
-                else{
+                else if(response.data.response.rated == false) {
                     router.push(router.history.current.query.redirect || '/');
                 }
             }else{
