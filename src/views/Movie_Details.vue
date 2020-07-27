@@ -155,7 +155,6 @@ import {TokenService} from "../services/storage.service";
 
 export default {
   mounted() {
-    console.log(TokenService.getRole());
     this.movietitle = this.$route.params.movietitle;
     this.release_date = this.$route.params.release_date;
     ApiService.get(

@@ -74,7 +74,7 @@ const actions = {
     logout({ commit }) {
         UserService.logout()
         commit('logoutSuccess')
-        router.push('/search')
+        router.push('/search_visitor')
     }
 }
 

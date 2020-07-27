@@ -58,6 +58,7 @@
             email: '',
             username: '',
             password: '',
+            phonenumber:'',
             snackbar1:false,
             snackbar2:false,
             valid: true,
@@ -88,7 +89,7 @@
                 if (this.$refs.form.validate()) {
                     //Success
                     this.snackbar2 = true
-                    this.register({username: this.username, password: this.password, firstname: this.firstName, lastname: this.lastName}).then(r => {
+                    this.register({username: this.username, password: this.password, firstname: this.firstName, lastname: this.lastName, email: this.email, phonenumber: this.phonenumber}).then(r => {
                         if(!r){
                             this.snackbar = true
                             this.loading = false

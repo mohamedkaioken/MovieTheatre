@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <vue-headful title="Movie Theatre | Search" description="Login To Movie Theatre"/>
     <v-row class="mb-4" align-content="center" justify="center">
       <v-col cols="6">
         <v-text-field
@@ -17,98 +18,6 @@
           @keyup="GetMovies"
         ></v-text-field>
       </v-col>
-    </v-row>
-    <v-row justify="center text-center mt-4" v-show="!ShowForm">
-      <v-col
-        cols="12"
-        sm="6"
-        md="4"
-        lg="3"
-        v-for="discover in discovers"
-        :key="discover.id"
-      >
-      <v-lazy
-        v-model="isActive"
-        :options="{
-          threshold: .5
-        }"
-        min-height="200"
-        transition="fade-transition"
-      >
-        <v-card class="mx-auto" max-width="344" >
-          <v-img :src="src + discover.backdrop_path" height="200px"></v-img>
-
-          <div class="overline">{{ new Date(discover.release_date).getFullYear() }}</div>
-          <v-card-title >
-            {{ discover.title }}
-          </v-card-title>
-          <v-card-actions>
-            <v-btn small @click="addToWatchlist(discover.title)" color="orange darken-3">
-              <v-icon left>mdi-login-variant</v-icon> Watchlist
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn small rounded @click.stop="movieDialog = true;refreshMovieDialog(discover)">
-             Show More <v-icon>mdi-chevron-up</v-icon>
-            </v-btn>
-          </v-card-actions>
-
-          <v-expand-transition>
-            <div v-show="show">
-              <v-divider></v-divider>
-
-              <v-card-text>
-                {{ discover.overview }}
-              </v-card-text>
-            </div>
-          </v-expand-transition>
-        </v-card>
-      </v-lazy>
-      </v-col>
-      <v-dialog
-      v-model="movieDialog"
-      max-width="450"
-      
-    >
-      <v-card color="grey darken-3" :loading="movieDialogData.movieid==-1">
-        <v-img :src="movieDialogData.movieImage" width="450px"></v-img>
-        <v-card-title class="headline">{{movieDialogData.movieName}}</v-card-title>
-        <v-spacer></v-spacer>
-        <v-card-subtitle class="text-left">
-          <v-chip
-            class="ma-1"
-            color="primary"
-            v-for="genreid in movieDialogData.movieGenres"
-            :key="genreid"
-            small
-          >
-            {{ genres.find(x => x.id === genreid).name }}
-          </v-chip>
-        </v-card-subtitle>
-        <v-card-text>
-          {{movieDialogData.movieDescription}}
-        </v-card-text>
-          
-        <v-card-actions>
-          <v-rating
-            v-model="rating"
-            background-color="white"
-            color="yellow accent-4"
-            dense
-            half-increments
-            hover
-            size="18"
-            @input="addRating($event, movieDialogData.movieid)"
-          ></v-rating>
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            @click="movieDialog = false"
-          >
-            Close
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     </v-row>
     <v-row justify="center text-center mt-4" v-show="ShowForm">
       <v-col
@@ -135,7 +44,7 @@
             {{ result.title }}
           </v-card-title>
           <v-card-actions>
-            <v-btn small @click="addToWatchlist(result.title)" color="orange darken-3">
+            <v-btn v-if="loggedIn" small @click="addToWatchlist(result.title)" color="orange darken-3">
               <v-icon left>mdi-login-variant</v-icon> Watchlist
             </v-btn>
             <v-spacer></v-spacer>
@@ -182,6 +91,7 @@
           
         <v-card-actions>
           <v-rating
+          v-if="loggedIn"
             v-model="rating"
             background-color="white"
             color="yellow accent-4"
@@ -211,22 +121,27 @@
 </template>
 
 <script>
+import { mapGetters} from "vuex";
 import ApiService from "../services/api.service";
-import {TokenService} from "../services/storage.service";
 export default {
   name: "Home",
 
   mounted() {
-      ApiService.get(
-      `https://api.themoviedb.org/3/discover/movie?api_key=18ba471261d253fb5c574c6f1de06e76`
-    ).then((r) => {
-      if (r.status == 200) {
-        this.discovers = r.data.results;
-      } else {
-        console.log(r);
-      }
-      console.log(this.results);
-    });
+    //   ApiService.get(
+    //   `https://api.themoviedb.org/3/search/movie?api_key=18ba471261d253fb5c574c6f1de06e76&query="+${this.movie}"`
+    // ).then((r) => {
+    //   if (r.status == 200) {
+    //     this.movies = r.data;
+    //     this.results = this.movies.results;
+    //     this.descriptions = this.results.map((s) => ({
+    //       description: s.overview,
+    //     }));
+    //     this.ShowTime = false;
+    //   } else {
+    //     console.log(r);
+    //   }
+    //   console.log(this.results);
+    // });
   },
   data: () => ({
     rating: 4.3,
@@ -242,7 +157,6 @@ export default {
     show: false,
     movies: [],
     results: [],
-    discovers:[],
     descriptions: [],
     movie: "",
     ShowForm: false,
@@ -357,7 +271,7 @@ export default {
           console.log(r.data[0].id);
           ApiService.post(
             `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/WatchList`
-          ,{movieId: r.data[0].id,userId: TokenService.getUserId()}).then(() => {
+          ,{movieId: r.data[0].id,userId: 283229}).then(() => {
               this.snackbar1 = true
           }).catch(function (error) {
             console.log(error);
@@ -388,16 +302,17 @@ export default {
     },
     addRating(value, id) {
       ApiService.post(
-        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Ratings/RateMovie`
-      ,{movieId: id,rating: value}).then(() => {
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Ratings/RateMovie/`
+      ,{movieId: id,userId: value}).then(() => {
           this.snackbar4 = true
-          this.movieDialog =false
-          console.log(id);
       }).catch(function (error) {
           this.snackbar2 = true;
         console.log(error);
       });
     }
+  },
+  computed: {
+    ...mapGetters("auth", ["loggedIn"]),
   },
 };
 </script>

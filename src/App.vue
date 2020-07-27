@@ -44,6 +44,9 @@
       <v-btn id="ff" v-if="loggedIn" text to="/search">
         Search
       </v-btn>
+      <v-btn id="ff" v-if="loggedIn" text to="/addmovie">
+        Add Movie
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn id="ff" v-if="loggedIn" text @click="TryLogout">
         LogOut
@@ -56,7 +59,7 @@
        <v-btn id="ff" v-if="loggedIn" text to="/recommended">
         Home
       </v-btn>
-      <v-btn id="ff" v-if="!loggedIn" text to="/search">
+      <v-btn id="ff" v-if="!loggedIn" text to="/search_visitor">
         Home
       </v-btn>
       <v-btn id="ff" v-if="loggedIn" text to="/watchlist">
@@ -67,7 +70,7 @@
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn id="ff" v-if="!loggedIn" text to="/login">
-        Login
+        Login |
       </v-btn>
       <v-btn id="ff" v-if="!loggedIn" text to="/register">
         Register

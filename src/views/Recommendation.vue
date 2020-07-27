@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <vue-headful title="Movie Theatre | Recommended" description="Login To Movie Theatre"/>
+    <vue-headful
+      title="Movie Theatre | Recommended"
+      description="Login To Movie Theatre"
+    />
     <v-row justify="start" align-start style="height: 500px;">
       <h1>Recommended Movies</h1>
       <v-col cols="12" sm="12" md="12" lg="12">
@@ -22,7 +25,7 @@
                 color="transparent"
                 width="200"
                 link
-                :to="movieDetails  + result.title + '/' + result.year"
+                :to="movieDetails + result.title + '/' + result.year"
               >
                 <v-img
                   :src="result.image"
@@ -30,10 +33,10 @@
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   height="200px"
                 >
-                <v-card-title
-                  class="subtitle-1"
-                  v-text="result.title"
-                ></v-card-title>
+                  <v-card-title
+                    class="subtitle-1"
+                    v-text="result.title"
+                  ></v-card-title>
                 </v-img>
 
                 <v-divider></v-divider>
@@ -113,9 +116,6 @@ import ApiService from "../services/api.service";
 export default {
   mounted() {
     this.GetMovie();
-    
-    
-    
   },
   data: () => ({
     searchQuery: [],
@@ -232,32 +232,36 @@ export default {
     GetMovie() {
       let movies = [];
       ApiService.get(
-      `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Recommendations/UserRecommendation`
-    ).then((data) => {
-      if (data.status == 200) {
-        movies = data.data.recommendations;
-         for (let i = 0; i < movies.length; i++) {
-        ApiService.get(
-          `https://api.themoviedb.org/3/search/multi?api_key=18ba471261d253fb5c574c6f1de06e76&query=${movies[i].title}`
-        ).then((r) => {
-          if (r.status == 200) {
-            movies[i].image = "https://image.tmdb.org/t/p/original"+r.data.results[0].poster_path;
-            movies[i].id++;
-          } else {
-            console.log(r);
+        `http://movierecommendationapi-prod.eu-central-1.elasticbeanstalk.com/api/Recommendations/UserRecommendation`
+      ).then((data) => {
+        if (data.status == 200) {
+          movies = data.data.recommendations;
+          for (let i = 0; i < movies.length; i++) {
+            ApiService.get(
+              `https://api.themoviedb.org/3/search/multi?api_key=18ba471261d253fb5c574c6f1de06e76&query=${movies[i].title}`
+            ).then((r) => {
+              if (r.status == 200) {
+                if (r.data.results[0].poster_path != null) {
+                  movies[i].image =
+                    "https://image.tmdb.org/t/p/original" +
+                    r.data.results[0].poster_path;
+                } else if (r.data.results[0].poster_path == null) {
+                  movies[i].image =
+                    "https://media.comicbook.com/files/img/default-movie.png";
+                }
+                movies[i].id++;
+              } else {
+                console.log(r);
+              }
+              console.log(movies[i].image);
+            });
           }
-          console.log(movies[i].image); 
-        });
-          
-      }
-        this.recommended = movies;
-        console.log(this.recommended);
-        
-      } else {
-        console.log(data);
-      }    
-    });
-     
+          this.recommended = movies;
+          console.log(this.recommended);
+        } else {
+          console.log(data);
+        }
+      });
     },
   },
 };

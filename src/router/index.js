@@ -5,7 +5,9 @@ import Home from '../views/Home.vue'
 import Recommended from '../views/Recommendation.vue'
 import Watchlist from '../views/Watchlist.vue'
 import MovieD from '../views/Movie_Details.vue'
-import Search from '../views/Search.vue'
+import SearchV from '../views/Search.vue'
+import Search from '../views/Search_Visitor.vue'
+import AddMovie from '../views/Add_Movie.vue'
 
 import { TokenService } from '../services/storage.service'
 
@@ -25,13 +27,23 @@ const router = new VueRouter({
       component: Recommended
     },
     {
-      path: '/search',
+      path: '/search_visitor',
       name: 'Search',
       component: Search,
       meta: {
         public: true,  // Allow access to even if not logged in
         onlyWhenLoggedOut: true
       }
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: SearchV,
+    },
+    {
+      path: '/addmovie',
+      name: 'AddMovie',
+      component: AddMovie,
     },
     {
       path: '/movie_details/:movietitle/:release_date',
