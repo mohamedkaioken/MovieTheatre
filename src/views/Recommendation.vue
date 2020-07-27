@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <vue-headful title="Movie Theatre | Recommended" description="Login To Movie Theatre"/>
     <v-row justify="start" align-start style="height: 500px;">
       <h1>Recommended Movies</h1>
       <v-col cols="12" sm="12" md="12" lg="12">
@@ -21,7 +22,7 @@
                 color="transparent"
                 width="200"
                 link
-                :to="movieDetails + result.title + '/' + result.year"
+                :to="movieDetails  + result.title + '/' + result.year"
               >
                 <v-img
                   :src="result.image"

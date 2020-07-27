@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <vue-headful title="Movie Theatre | Search" description="Login To Movie Theatre"/>
     <v-row class="mb-4" align-content="center" justify="center">
       <v-col cols="6">
         <v-text-field

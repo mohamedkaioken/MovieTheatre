@@ -1,5 +1,6 @@
 <template>
   <v-main>
+     <vue-headful title="Movie Theatre | Watch List" description="Login To Movie Theatre"/>
       <div class="overline text-center">Your Watch List Movies</div>
       <v-carousel>
         <v-carousel-item

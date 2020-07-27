@@ -1,5 +1,6 @@
 <template>
   <v-container>
+   <vue-headful :title="'Movie Theatre |' + results.title" description="Login To Movie Theatre"/>
     <v-row>
       <v-col cols="12">
         <v-img
@@ -40,8 +41,7 @@
                 </v-col>
               </v-card-title>
               <v-card-subtitle class="ml-3">
-                {{ new Date(results.release_date).getFullYear() }} |
-                {{ new Date(results.runtime).getHours() }} Hours
+                {{ new Date(results.release_date).getFullYear() }} 
               </v-card-subtitle>
               <v-chip
                 class="ma-2 ml-5"

@@ -49,6 +49,33 @@
         LogOut
       </v-btn>
     </v-app-bar>
+    <v-app-bar app v-if="!loggedIn" clipped-left color="black">
+      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" color="orange darken-3"/> -->
+      <v-toolbar-title id="ff"><v-img  src="@/assets/Krisp.png"></v-img>
+      </v-toolbar-title>
+       <v-btn id="ff" v-if="loggedIn" text to="/recommended">
+        Home
+      </v-btn>
+      <v-btn id="ff" v-if="!loggedIn" text to="/">
+        Home
+      </v-btn>
+      <v-btn id="ff" v-if="loggedIn" text to="/watchlist">
+        Watch List
+      </v-btn>
+      <v-btn id="ff" v-if="loggedIn" text to="/search">
+        Search
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn id="ff" v-if="!loggedIn" text to="/login">
+        Login
+      </v-btn>
+      <v-btn id="ff" v-if="!loggedIn" text to="/register">
+        Register
+      </v-btn>
+      <v-btn id="ff" v-if="loggedIn" text @click="TryLogout">
+        LogOut
+      </v-btn>
+    </v-app-bar>
 
     <v-main id="bg">
       <v-container class="fill-height" fluid>

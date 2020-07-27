@@ -17,7 +17,12 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta: {
+        public: true,  // Allow access to even if not logged in
+        onlyWhenLoggedOut: true
+      }
+      
     },
     {
       path: '/recommended',
